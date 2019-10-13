@@ -1,0 +1,62 @@
+with open("content.txt", "r", encoding='UTF-8') as f:
+    # 方便读取行数
+    content = f.readlines()
+    f.seek(0, 0)
+    # 方便读取字符数
+
+    content1 = f.read()
+    # 过滤掉空白字符
+    r = list(filter(lambda x: x != "" and x != "\n", content))
+    # 过滤掉空白字符
+    r1 = content1.replace(" ", "").replace("\n", "")
+
+    length = len(r)              # 有效行数
+    length1 = len(r1)             # 有效字符数
+
+    print("行数为", length)
+    print("字符数为", length1)
+
+    word = []
+
+    # 去掉每行末尾的换行符，并且通过空格分割为单个字符串
+    for i in r:
+        if i.find("\n") != -1:
+            i = i.replace("\n", "")
+        word.extend(i.split(" "))
+
+    dic = {}
+    count = 0
+    # 过滤掉不合条件的字符串，并且将符合的字符串加入字典统计次数
+    for i in word:
+        if i.isalnum() and len(i) >= 4:
+            # 符号条件的字符串计数
+            count += 1
+            if i in dic:
+                dic[i] = dic[i] + 1
+            else:
+                dic[i] = 1
+
+    print("单词数为", count)
+
+    rank = []
+    for i in dic:
+        rank.append(dic[i])
+
+    rank = sorted(rank, reverse=True)
+
+    maxwords = []
+
+    flag = False
+    for i in rank:
+        if flag:
+            break
+        for j in dic:
+            if i == dic[j] and (j not in maxwords):
+                maxwords.append((j ,dic[j]))
+                # 数量足够就跳出多层循环
+                if len(maxwords) == 10 or len(maxwords) == len(dic):
+                    flag = True
+                    break
+
+    print(maxwords)
+    
